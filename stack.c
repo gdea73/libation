@@ -54,6 +54,31 @@ static void * stack_pop(stackation *s)
 	return get_index(internals, --internals->top_index);
 }
 
+static int stack_expand(stackation *s, size_t new_max_elements)
+{
+	stackation_internals *internals = NULL;
+
+	EINVAL_IF_NULL(s, -1);
+	internals = s->internals;
+
+	/* downsizing an existing stack is disallowed */
+	if (new_max_elements < internals->max_elements) {
+		errno = EINVAL;
+		return -1;
+	}
+
+	internals->data = realloc(
+		internals->data, internals->element_size * new_max_elements
+	);
+	if (!internals->data) {
+		errno = ENOMEM;
+		return -1;
+	}
+
+	internals->max_elements = new_max_elements;
+	return 0;
+}
+
 static void stack_free(stackation *s)
 {
 	if (!s) {
@@ -89,6 +114,7 @@ int stackation_init(size_t max_elements, size_t element_size, stackation *s)
 		goto error_cleanup;
 	}
 	/* assign function pointers */
+	s->expand = stack_expand;
 	s->push = stack_push;
 	s->pop = stack_pop;
 	s->free = stack_free;

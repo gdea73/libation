@@ -24,9 +24,9 @@ static void stack_test(void)
 	stackation s = {0};
 
 	/* can't initialize stack unless a valid pointer is supplied */
-	ASSERTATION(-1, stackation_init(5, 3, NULL));
+	ASSERTATION(-1, stackation_init(49, 73, NULL));
 	/* can initialize if we pass &s */
-	ASSERTATION(0, stackation_init(5, 3, &s));
+	ASSERTATION(0, stackation_init(4, 3, &s));
 	/* can't pop off a stack that's initially empty */
 	ASSERTATION(NULL, s.pop(&s));
 	/* can push onto the stack five times */
@@ -34,9 +34,11 @@ static void stack_test(void)
 	ASSERTATION(0, s.push(&s, STACK_ELEMENT_1));
 	ASSERTATION(0, s.push(&s, STACK_ELEMENT_2));
 	ASSERTATION(0, s.push(&s, STACK_ELEMENT_3));
-	ASSERTATION(0, s.push(&s, STACK_ELEMENT_4));
 	/* can't push onto the full stack */
-	ASSERTATION(-1, s.push(&s, "??"));
+	ASSERTATION(-1, s.push(&s, STACK_ELEMENT_4));
+	/* can if we resize */
+	ASSERTATION(0, s.expand(&s, 5));
+	ASSERTATION(0, s.push(&s, STACK_ELEMENT_4));
 	/* can pop off of the stack five times */
 	ASSERTATION_FMT("%s", STACK_ELEMENT_4, s.pop(&s));
 	ASSERTATION_FMT("%s", STACK_ELEMENT_3, s.pop(&s));
