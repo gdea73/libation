@@ -1,5 +1,5 @@
 
-CFLAGS = -g -I./include -Wall -Wextra -std=gnu11
+CFLAGS = -g3 -I./include -Wall -Wextra -std=gnu11
 
 libation_shared = lib/libation.so
 
@@ -9,7 +9,7 @@ objects = $(patsubst ./%.c, ./%.o, $(source))
 $(libation_shared): $(objects)
 	$(CC) $(CFLAGS) -shared -o $(libation_shared) $(objects)
 
-TEST_CFLAGS = $(CFLAGS) -I./test -L./lib -lation
+TEST_CFLAGS = $(CFLAGS) -I./test -L./lib -lation -lc
 test_binary = test/libation_test
 
 test_source = $(wildcard test/*.c)
@@ -21,4 +21,4 @@ $(test_binary): $(test_objects)
 test: $(test_binary)
 
 clean:
-	rm -f *.o $(libation_shared) $(test_binary)
+	rm -f *.o test/*.o $(libation_shared) $(test_binary)

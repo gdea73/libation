@@ -1,0 +1,3 @@
+#!/bin/bash
+
+make clean && make && make test && ./test/libation_test

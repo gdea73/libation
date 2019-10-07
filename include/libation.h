@@ -11,7 +11,7 @@ typedef struct stackation {
 	/* pops the top element off the top of this stack */
 	void * (*pop)(struct stackation *s);
 	/* releases all memory used by this stack */
-	int (*free)(struct stackation *s);
+	void (*free)(struct stackation *s);
 } stackation;
 
 /* initializes a stack */
